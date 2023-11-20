@@ -6,11 +6,13 @@ const initialItems = [
 
 function App() {
   const [items, setItems] = useState([]);
-
+  function handleAddItems(item) {
+    setItems((items) => [...items, item]);
+  }
   return (
     <div className="app">
       <Logo />
-      <Form />
+      <Form onAddItems={handleAddItems}/>
       <PackingList items={items} />
       <Stats />
     </div>
@@ -24,17 +26,15 @@ function Logo() {
   );
 }
 
-function Form() {
+function Form({onAddItems}) {
   const [description, setDescription] = useState("");
   const [quantity,setQuantity] =useState(1);
-  function handleAddItem(item) {
-    setItems((items) => [...items, item]);
-  }
+ 
   function handleSubmit(e) {
     e.preventDefault();
     if(!description) return ;
     const newItem = { description, quantity, packed: false, id: Date.now() };
-    handleAddItem(newItem);
+    onAddItems(newItem);
 
     console.log(newItem);
 
@@ -72,7 +72,7 @@ function PackingList({items}){
 function Item({item}){
   return(
     <>
-    <li><span style={item.packed?{textDecoration:"line-through"}: {}}>{item.description} {item.quantity}</span>
+    <li><span style={item.packed?{textDecoration:"line-through"}: {}}>{item.quantity} {item.description}</span>
     <button>❌</button></li>
     </>  
     );  
